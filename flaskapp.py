@@ -37,7 +37,7 @@ def api_status():
 	# do work to print status of worker
 	info = worker_information()
 	#return "This is a status page"+statusLink+ "\n las" + worker_info_string
-	return render_template('hello.html', info=info)
+	return render_template('index.html', info=info)
 
 def run_app():
 	print "running flaskapp"
