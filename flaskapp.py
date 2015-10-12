@@ -41,6 +41,6 @@ def api_status():
 
 def run_app():
 	print "running flaskapp"
-	flaskapp.run(debug=True)
+	flaskapp.run(host="0.0.0.0", debug=True)
 
 
