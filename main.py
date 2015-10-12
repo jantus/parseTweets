@@ -90,6 +90,8 @@ def get_worker_information():
 			information['denna%'] = round(information['denna']/information['total']*100,2)
 			information['hen%'] = round(information['hen']/information['total']*100,2)
 
+	information['total'] = int(information['total'])
+
 	return information
 
 	
