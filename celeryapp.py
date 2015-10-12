@@ -15,8 +15,7 @@ def parse_tweets(self):
 	self.update_state(state='WORKING', meta={'file': None, 'function': None, 'progress': 0, 'result': None})
 
 	self.update_state(state='WORKING', meta={'file': None, 'function': "get_twitter_file_names()", 'progress': 0, 'result': None})
-	#filename_list = twitter.get_twitter_file_names()
-	filename_list = ["tweets_0.txt", "tweets_19.txt"]
+	filename_list = twitter.get_twitter_file_names()
 
 	
 	self.update_state(state='WORKING', meta={'file': None, 'function': "create_pronoun_dictionary()", 'progress': 0, 'result': None})
@@ -26,12 +25,10 @@ def parse_tweets(self):
 	list_size = float(len(filename_list))
 	for filename in filename_list:
 		# get twitter file
-		#self.update_state(state='WORKING', meta={	'file': filename, 'function': "get_twitter_file()", 
-		#											'progress': iterator/list_size, 'result': pronoun_dictionary})
+		self.update_state(state='WORKING', meta={	'file': filename, 'function': "get_twitter_file()", 
+													'progress': iterator/list_size, 'result': pronoun_dictionary})
 		
-		#tweet_file = twitter.get_twitter_file(filename)
-		f = open(filename)
-		tweet_file = f.read()
+		tweet_file = twitter.get_twitter_file(filename)
 
 		# add local dictionary of pronouns to large dictionary of pronouns
 		self.update_state(state='WORKING', meta={	'file': filename, 'function': "parse_tweetfile()", 
