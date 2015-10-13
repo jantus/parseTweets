@@ -1,11 +1,12 @@
-import celeryapp
-import flaskapp
+from celeryapp import parse_tweets
+import flaskapp 
 import random
 
 
 def get_worker_information():
 	
-	task = celeryapp.parse_tweets.AsyncResult(task_id)
+	task = parse_tweets.AsyncResult(task_id)
+	print task.id
 	print task.state
 	information = {}
 	information['state'] = task.state
@@ -97,12 +98,11 @@ def get_worker_information():
 	
 
 def main():
+	print "Start worker"
+	task = parse_tweets.apply_async()
 	global task_id
-	task_id = celeryapp.start_worker()
+	task_id = task.id
 
-	task = celeryapp.parse_tweets.AsyncResult(task_id)
-
-	state = task.state
 	print "Worker state"
 	print task.state
 	print task.info
