@@ -1,115 +1,83 @@
-from celeryapp import parse_tweets
+from tasks import parse_tweets
+from twitterparser import get_twitter_file_names
+from twitterparser import create_pronoun_dictionary
 import flaskapp 
 import random
 
 
 def get_worker_information():
-	
-	task = parse_tweets.AsyncResult(task_id)
-	print task.id
-	print task.state
 	information = {}
-	information['state'] = task.state
-	information['tweet_file'] = 'None'
-	information['progress'] = 'N/A'
-	information['function'] = 'None'
-	information['tweets'] = 0
-	information['han'] = 0
-	information['hon'] = 0
-	information['det'] = 0
-	information['denne'] = 0
-	information['den'] = 0
-	information['denna'] = 0
-	information['hen'] = 0
-	information['total'] = 0
+	worker_results = []
+	information["progress"] = 0
+	print result_array
+	for result in result_array:
+		print result.ready()
+		if result.ready() == True:
+			information["progress"] += 1
+			filename, result_dict = result.get()
+			result_dict['file'] = filename
+			worker_results.append(result_dict)
 
-	information['han%'] = 0
-	information['hon%'] = 0
-	information['det%'] = 0
-	information['denne%'] = 0
-	information['den%'] = 0
-	information['denna%'] = 0
-	information['hen%'] = 0
-	
+	information["worker_results"] = worker_results
+	information["progress"] = int(round(float(information["progress"]) / float(len(result_array)),2)*100)
 
-	if task.state == "WORKING":
-		information['state'] = task.state
-		information['tweet_file'] = task.info['file']
-		information['progress'] = task.info['progress']
-		information['function'] = task.info['function']
-		if task.info['result']:
-			information['tweets'] = task.info['result']['tweets']
-			information['han'] = task.info['result']['han']
-			information['hon'] = task.info['result']['hon']
-			information['det'] = task.info['result']['det']
-			information['denne'] = task.info['result']['denne']
-			information['den'] = task.info['result']['den']
-			information['denna'] = task.info['result']['denna']
-			information['hen'] = task.info['result']['hen']
-			information['total'] = float(information['han']+
-										information['hon']+
-										information['det']+
-										information['denne']+
-										information['den']+
-										information['denna']+
-										information['hen'])
-			if information['total'] > 0:
-				information['han%'] = round(information['han']/information['total']*100,2)
-				information['hon%'] = round(information['hon']/information['total']*100,2)
-				information['det%'] = round(information['det']/information['total']*100,2)
-				information['denne%'] = round(information['denne']/information['total']*100,2)
-				information['den%'] = round(information['den']/information['total']*100,2)
-				information['denna%'] = round(information['denna']/information['total']*100,2)
-				information['hen%'] = round(information['hen']/information['total']*100,2)
+	# calculate total
+	total = create_pronoun_dictionary()
+	total['file'] = ""
+	total_sum = 0
+	for result in information["worker_results"]:
+		for key, value in result.iteritems():
+			if key == "file":
+				continue
+			total[key] += value
+			total_sum += value
+	total['total'] = total_sum
 
-	elif task.state == "SUCCESS":
-		information['state'] = task.state
-		information['tweet_file'] = 'None'
-		information['progress'] = '100'
-		information['function'] = 'None'
-		information['tweets'] = task.result['tweets']
-		information['han'] = task.result['han']
-		information['hon'] = task.result['hon']
-		information['det'] = task.result['det']
-		information['denne'] = task.result['denne']
-		information['den'] = task.result['den']
-		information['denna'] = task.result['denna']
-		information['hen'] = task.result['hen']
-		information['total'] = float(information['han']+
-										information['hon']+
-										information['det']+
-										information['denne']+
-										information['den']+
-										information['denna']+
-										information['hen'])
-		if information['total'] > 0:
-			information['han%'] = round(information['han']/information['total']*100,2)
-			information['hon%'] = round(information['hon']/information['total']*100,2)
-			information['det%'] = round(information['det']/information['total']*100,2)
-			information['denne%'] = round(information['denne']/information['total']*100,2)
-			information['den%'] = round(information['den']/information['total']*100,2)
-			information['denna%'] = round(information['denna']/information['total']*100,2)
-			information['hen%'] = round(information['hen']/information['total']*100,2)
+	# calculate total in percent
 
-	information['total'] = int(information['total'])
+	total_percent =  create_pronoun_dictionary()
+	total_percent["file"] = ""
+	total_percent["total"] = 0
+	for key, value in total.iteritems():
+		if key == "file":
+				continue
+		if total['total'] > 0:
+			total_percent[key] += round(float(value)/float(total['total']), 2)*100
+		else:
+			total_percent[key] = 0
+	information["total"] = total
+	information["total_percent"] = total_percent
 
+
+	print information
 	return information
 
 	
 
 def main():
-	print "Start worker"
-	task = parse_tweets.apply_async()
-	global task_id
-	task_id = task.id
+	
+	tweet_files = get_twitter_file_names()
 
-	print "Worker state"
-	print task.state
-	print task.info
+	global result_array
+	result_array = []
+	
+	for filename in tweet_files:
+		print "Create task for file", filename
+		result = parse_tweets.delay(filename)
+		global result_array
+		result_array.append(result)
 
 	flaskapp.set_function(get_worker_information)
-
 	flaskapp.run_app()
+
+	
+	print "Done"
 
 if __name__ == '__main__':
 	main()
+
+
+
+
+
+

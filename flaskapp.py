@@ -6,21 +6,10 @@ flaskapp = Flask(__name__)
 worker_info_string = ""
 statusLink = "<a href='status'>Worker Status</a>"
 
-def create_html():
-	pass
-
-def create_header():
-	pass
-
 def create_body():
 	body = "<div style='width:200px: margin-left: auto; margin-right:auto;'>hello</div>"
 	return body
 
-def create_footer():
-	pass
-
-def update_body():
-	pass
 
 def set_function(function):
 	global worker_information 

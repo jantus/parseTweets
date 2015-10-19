@@ -26,7 +26,6 @@ def get_twitter_file(filename):
 	return twitter_file
 
 
-
 # Takes a String of tweets and a dictionary to store the values.
 def parse_tweetfile(tweet_file, pronoun_dictionary):
 	tweet_list = tweet_file.split('\r\n\n')

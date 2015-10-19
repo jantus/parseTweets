@@ -1,22 +1,15 @@
-
 <div style="width:50%; margin:auto;">
 	<div style="margin:50px;">
 		<a href="status">Update status</a>
 		<h2 >Worker Information</h2>
 		<table >
 			<tr>
-				<td width='110px'>State</td>
-				<td width='110px'>Processing File</td>
 				<td width='110px'>Progress</td>
-				<td width='110px'>In Function</td>
 				<td width='110px'>Parsed Tweets</td>
 			</tr>
 			<tr>
-				<td>{{info['state']}}</td>
-				<td>{{info['tweet_file']}}</td>
 				<td>{{info['progress']}}%</td>
-				<td>{{info['function']}}</td>
-				<td>{{info['tweets']}}</td>
+				<td>{{info['total']['total']}}</td>
 			</tr>
 		</table>
 	</div>
@@ -40,23 +33,23 @@
 				<td width='110px'>Total</td>
 			</tr>
 			<tr>
-				<td width='110px'>{{info['han']}}</td>
-				<td width='110px'>{{info['hon']}}</td>
-				<td width='110px'>{{info['det']}}</td>
-				<td width='110px'>{{info['denne']}}</td>
-				<td width='110px'>{{info['den']}}</td>
-				<td width='110px'>{{info['denna']}}</td>
-				<td width='110px'>{{info['hen']}}</td>
-				<td width='110px'>{{info['total']}}</td>
+				<td width='110px'>{{info['total']['han']}}</td>
+				<td width='110px'>{{info['total']['hon']}}</td>
+				<td width='110px'>{{info['total']['det']}}</td>
+				<td width='110px'>{{info['total']['denne']}}</td>
+				<td width='110px'>{{info['total']['den']}}</td>
+				<td width='110px'>{{info['total']['denna']}}</td>
+				<td width='110px'>{{info['total']['hen']}}</td>
+				<td width='110px'>{{info['total']['total']}}</td>
 			</tr>
 			<tr>
-				<td width='110px'>{{info['han%']}}%</td>
-				<td width='110px'>{{info['hon%']}}%</td>
-				<td width='110px'>{{info['det%']}}%</td>
-				<td width='110px'>{{info['denne%']}}%</td>
-				<td width='110px'>{{info['den%']}}%</td>
-				<td width='110px'>{{info['denna%']}}%</td>
-				<td width='110px'>{{info['hen%']}}%</td>
+				<td width='110px'>{{info['total_percent']['han']}}%</td>
+				<td width='110px'>{{info['total_percent']['hon']}}%</td>
+				<td width='110px'>{{info['total_percent']['det']}}%</td>
+				<td width='110px'>{{info['total_percent']['denne']}}%</td>
+				<td width='110px'>{{info['total_percent']['den']}}%</td>
+				<td width='110px'>{{info['total_percent']['denna']}}%</td>
+				<td width='110px'>{{info['total_percent']['hen']}}%</td>
 				<td width='110px'>100%</td>
 			</tr>
 		<table>
@@ -72,54 +65,87 @@
 		{% endif %}
 			Result
 		</h2>
-		<div style="position:absolute;width:50px;height:{{info['han%']*5+80}}px; bottom:0; margin-left:10">
-			<p style="position:inherit; text-align:center; width:100%;">{{info['han']}}</p>
-			<div style="width:50px; height:{{info['han%']*5}}px; position:inherit; bottom:40;background-color:#ffeeee;">
+		<div style="position:absolute;width:50px;height:{{info['total_percent']['han']*5+80}}px; bottom:0; margin-left:10">
+			<p style="position:inherit; text-align:center; width:100%;">{{info['total']['han']}}</p>
+			<div style="width:50px; height:{{info['total_percent']['han']*5}}px; position:inherit; bottom:40;background-color:#ffeeee;">
 			</div>		
 			<p style="bottom:0;position:inherit;text-align:center; width:100%;">Han</p>
 		</div>
 		
-		<div style="position:absolute;width:50px;height:{{info['hon%']*5+80}}px; bottom:0; margin-left:70">
-			<p style="position:inherit; text-align:center; width:100%;">{{info['hon']}}</p>
-			<div style="width:50px; height:{{info['hon%']*5}}px; position:inherit; bottom:40;background-color:#eeffee;">
+		<div style="position:absolute;width:50px;height:{{info['total_percent']['hon']*5+80}}px; bottom:0; margin-left:70">
+			<p style="position:inherit; text-align:center; width:100%;">{{info['total']['hon']}}</p>
+			<div style="width:50px; height:{{info['total_percent']['hon']*5}}px; position:inherit; bottom:40;background-color:#eeffee;">
 			</div>		
 			<p style="bottom:0;position:inherit;text-align:center; width:100%;">Hon</p>
 		</div>
 
-		<div style="position:absolute;width:50px;height:{{info['det%']*5+80}}px; bottom:0; margin-left:130">
-			<p style="position:inherit; text-align:center; width:100%;">{{info['det']}}</p>
-			<div style="width:50px; height:{{info['det%']*5}}px; position:inherit; bottom:40;background-color:#eeeeff;">
+		<div style="position:absolute;width:50px;height:{{info['total_percent']['det']*5+80}}px; bottom:0; margin-left:130">
+			<p style="position:inherit; text-align:center; width:100%;">{{info['total']['det']}}</p>
+			<div style="width:50px; height:{{info['total_percent']['det']*5}}px; position:inherit; bottom:40;background-color:#eeeeff;">
 			</div>		
 			<p style="bottom:0;position:inherit;text-align:center; width:100%;">Det</p>
 		</div>
 
-		<div style="position:absolute;width:50px;height:{{info['denne%']*5+80}}px; bottom:0; margin-left:190">
-			<p style="position:inherit; text-align:center; width:100%;">{{info['denne']}}</p>
-			<div style="width:50px; height:{{info['denne%']*5}}px; position:inherit; bottom:40;background-color:#ffffee;">
+		<div style="position:absolute;width:50px;height:{{info['total_percent']['denne']*5+80}}px; bottom:0; margin-left:190">
+			<p style="position:inherit; text-align:center; width:100%;">{{info['total']['denne']}}</p>
+			<div style="width:50px; height:{{info['total_percent']['denne']*5}}px; position:inherit; bottom:40;background-color:#ffffee;">
 			</div>		
 			<p style="bottom:0;position:inherit;text-align:center; width:100%;">Denne</p>
 		</div>
 
-		<div style="position:absolute;width:50px;height:{{info['den%']*5+80}}px; bottom:0; margin-left:250">
-			<p style="position:inherit; text-align:center; width:100%;">{{info['den']}}</p>
-			<div style="width:50px; height:{{info['den%']*5}}px; position:inherit; bottom:40;background-color:#ffeeff;">
+		<div style="position:absolute;width:50px;height:{{info['total_percent']['den']*5+80}}px; bottom:0; margin-left:250">
+			<p style="position:inherit; text-align:center; width:100%;">{{info['total']['den']}}</p>
+			<div style="width:50px; height:{{info['total_percent']['den']*5}}px; position:inherit; bottom:40;background-color:#ffeeff;">
 			</div>		
 			<p style="bottom:0;position:inherit;text-align:center; width:100%;">Den</p>
 		</div>
 
-		<div style="position:absolute;width:50px;height:{{info['denna%']*5+80}}px; bottom:0; margin-left:310">
-			<p style="position:inherit; text-align:center; width:100%;">{{info['denna']}}</p>
-			<div style="width:50px; height:{{info['denna%']*5}}px; position:inherit; bottom:40;background-color:#eeffff;">
+		<div style="position:absolute;width:50px;height:{{info['total_percent']['denna']*5+80}}px; bottom:0; margin-left:310">
+			<p style="position:inherit; text-align:center; width:100%;">{{info['total']['denna']}}</p>
+			<div style="width:50px; height:{{info['total_percent']['denna']*5}}px; position:inherit; bottom:40;background-color:#eeffff;">
 			</div>		
 			<p style="bottom:0;position:inherit;text-align:center; width:100%;">Denna</p>
 		</div>
 
-		<div style="position:absolute;width:50px;height:{{info['hen%']*5+80}}px; bottom:0; margin-left:370">
-			<p style="position:inherit; text-align:center; width:100%;">{{info['hen']}}</p>
-			<div style="width:50px; height:{{info['hen%']*5}}px; position:inherit; bottom:40;background-color:#ffdddd;">
+		<div style="position:absolute;width:50px;height:{{info['total_percent']['hen']*5+80}}px; bottom:0; margin-left:370">
+			<p style="position:inherit; text-align:center; width:100%;">{{info['total']['hen']}}</p>
+			<div style="width:50px; height:{{info['total_percent']['hen']*5}}px; position:inherit; bottom:40;background-color:#ffdddd;">
 			</div>		
 			<p style="bottom:0;position:inherit;text-align:center; width:100%;">Hen</p>
 		</div>
+	</div>
+
+	<div style="margin:50px;">
+		<h2> 
+		{% if info['progress'] < 100  %}
+  			Current
+		{% endif %}
+			Results of individual files
+		</h2>
+		<table>
+			<tr>
+				<td width='110px'>File</td>
+				<td width='110px'>Han</td>
+				<td width='110px'>Hon</td>
+				<td width='110px'>Det</td>
+				<td width='110px'>Denne</td>
+				<td width='110px'>Den</td>
+				<td width='110px'>Denna</td>
+				<td width='110px'>Hen</td>
+			</tr>
+			{% for entry in info['worker_results'] %}
+			<tr>
+				<td width='110px'>{{entry['file']}}</td>
+				<td width='110px'>{{entry['han']}}</td>
+				<td width='110px'>{{entry['hon']}}</td>
+				<td width='110px'>{{entry['det']}}</td>
+				<td width='110px'>{{entry['denne']}}</td>
+				<td width='110px'>{{entry['den']}}</td>
+				<td width='110px'>{{entry['denna']}}</td>
+				<td width='110px'>{{entry['hen']}}</td>
+			{% endfor %}
+			</tr>
+		</table> 
 	</div>
 
 </div>
