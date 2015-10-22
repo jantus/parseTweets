@@ -10,6 +10,40 @@ import worker_vm.server as worker
 def get_worker_information():
 	information = {}
 	worker_results = []
+	information["progress"] = 100%
+	information["worker_results"] = worker_results
+	
+	# calculate total
+	total = create_pronoun_dictionary()
+	total['file'] = ""
+	total_sum = 0
+	for key, value in result_dict.iteritems():
+		total[key] += value
+		total_sum += value
+	total['total'] = total_sum
+
+	# calculate total in percent
+
+	total_percent =  create_pronoun_dictionary()
+	total_percent["file"] = ""
+	total_percent["total"] = 0
+	for key, value in total.iteritems():
+		if key == "file":
+				continue
+		if total['total'] > 0:
+			total_percent[key] += round(float(value)/float(total['total']), 2)*100
+		else:
+			total_percent[key] = 0
+	information["total"] = total
+	information["total_percent"] = total_percent
+
+
+	print information
+	return information
+
+	'''
+	information = {}
+	worker_results = []
 	information["progress"] = 0
 	print result_array
 	for result in result_array:
@@ -53,15 +87,16 @@ def get_worker_information():
 
 	print information
 	return information
-
+	'''
 	
 
 def main():
 	
 	tweet_files = get_twitter_file_names()
 
-	global result_array
-	result_array = []
+	result_dict = create_pronoun_dictionary()
+	global result_dict
+	
 	n = 5
 	chunks_list = [tweet_files[i:i+n] for i in range(0, len(tweet_files), n)]
 
@@ -82,8 +117,13 @@ def main():
 
 	for jobs in jobs_list:
 		print "waiting for", jobs, "..."
-		res = jobs.get()
-		print res
+		result_list = jobs.get()
+		for result in result_list:
+			for key, value in result[1].iteritems():
+				global result_dict
+				result_dict['key'] += value
+
+
 
 
 	for i in range(0, len(jobs_list)):
