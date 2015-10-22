@@ -76,10 +76,12 @@ def main():
 	worker_name = "joakim-lab3-worker-"
 	# Start servers
 	for i in range(0, len(jobs_list)):
+		print "Starting worker named: ", worker_name+str(i)
 		worker.initialize(worker_name+str(i))
 
 
 	for jobs in jobs_list:
+		print "waiting for", jobs, "..."
 		res = jobs.get()
 		print res
 
