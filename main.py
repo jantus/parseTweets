@@ -10,7 +10,7 @@ import worker_vm.server as worker
 def get_worker_information():
 	information = {}
 	worker_results = []
-	information["progress"] = 100%
+	information["progress"] = "100%"
 	information["worker_results"] = worker_results
 	
 	# calculate total
