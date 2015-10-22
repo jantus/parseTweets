@@ -2,10 +2,10 @@ import sys, os, time
 from novaclient.client import Client
 
 
-config = {'username':os.environ['OS_USERNAME'], 
-          'api_key':os.environ['OS_PASSWORD'],
-          'project_id':os.environ['OS_TENANT_NAME'],
-          'auth_url':os.environ['OS_AUTH_URL'],
+config = {'username':"joan4369", 
+          'api_key':"openstack",
+          'project_id':"ACC-Course",
+          'auth_url':'http://smog.uppmax.uu.se:5000/v2.0',
            }
 nc = Client('2',**config)
 KEYPAIRNAME = "openstack-joakim"
