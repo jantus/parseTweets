@@ -9,12 +9,12 @@ config = {'username':"joan4369",
            }
 nc = Client('2',**config)
 KEYPAIRNAME = "openstack-joakim"
-SERVERNAME = "instance-lab3-joakim-worker"
+
 FLAVOR =  nc.flavors.find(name="m1.medium")
-IMAGE = nc.images.find(name="Ubuntu Server 14.04 LTS (Trusty Tahr)")
+IMAGE = nc.images.find(name="lab3-joakim-worker")
 floating_ip = 0
 
-def initialize(): 
+def initialize(name):
     SERVERNAME = name 
 
     serverList = nc.servers.list(search_opts={'name': SERVERNAME})
@@ -30,10 +30,11 @@ def initialize():
             print "Erik was right"
 
         
-        script = file("userdata.yml")
-        userdata = script.read()
+        f = open("userdata.yml", "r")
+        userdata = f.read()
         server = nc.servers.create(SERVERNAME, IMAGE, FLAVOR, key_name=keypair.name, userdata=userdata)
-        script.close()
+        print userdata
+        f.close()
         
         print "Created server named:", SERVERNAME
 

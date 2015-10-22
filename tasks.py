@@ -1,7 +1,7 @@
 from celery import Celery
 import twitterparser as twitter
 
-app = Celery('tasks', backend='amqp', broker='amqp://')
+app = Celery('tasks', backend='amqp', broker='amqp://antus:antusantus@130.238.29.29/vhost_antus')
 
 @app.task(bind=True)
 def parse_tweets(self, filename):

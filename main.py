@@ -1,8 +1,10 @@
 from tasks import parse_tweets
 from twitterparser import get_twitter_file_names
 from twitterparser import create_pronoun_dictionary
+from celery import group
 import flaskapp 
 import random
+import worker_vm.server as worker
 
 
 def get_worker_information():
@@ -60,12 +62,31 @@ def main():
 
 	global result_array
 	result_array = []
-	
-	for filename in tweet_files:
-		print "Create task for file", filename
-		result = parse_tweets.delay(filename)
-		global result_array
-		result_array.append(result)
+
+	chunks_list = [tweet_files[i:i+n] for i in range(0, len(tweet_files), n)]
+
+	jobs_list = []
+	for chunck in chunks_list:
+		jobs = group(parse_tweets.s(filename) for filename in chunck)
+		res = jobs.apply_async()
+		jobs_list.append(res)
+
+	print "Jobs added to the queue"
+
+	worker_name = "joakim-lab3-worker-"
+	# Start servers
+	for i in range(0, len(jobs_list)):
+		worker.initialize(worker_name+str(i))
+
+
+	for jobs in jobs_list:
+		res = jobs.get()
+		print res
+
+
+	for i in range(0, len(jobs_list)):
+		worker.terminate(worker_name+str(i))
+
 
 	flaskapp.set_function(get_worker_information)
 	flaskapp.run_app()
