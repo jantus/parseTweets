@@ -1,0 +1,4 @@
+#cloud-config
+runcmd:
+  - cd parseTweets
+  - celery worker -l info -A tasks
