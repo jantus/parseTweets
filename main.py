@@ -121,7 +121,7 @@ def main():
 		for result in result_list:
 			for key, value in result[1].iteritems():
 				global result_dict
-				result_dict['key'] += value
+				result_dict[key] += value
 
 
 
