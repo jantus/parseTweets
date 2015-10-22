@@ -9,7 +9,7 @@ config = {'username':"joan4369",
            }
 nc = Client('2',**config)
 KEYPAIRNAME = "openstack-joakim"
-
+USERDATAFILE = "worker_vm/userdata.yml"
 FLAVOR =  nc.flavors.find(name="m1.medium")
 IMAGE = nc.images.find(name="lab3-joakim-worker")
 floating_ip = 0
@@ -30,7 +30,7 @@ def initialize(name):
             print "Erik was right"
 
         
-        f = open("userdata.yml", "r")
+        f = open(USERDATAFILE, "r")
         userdata = f.read()
         server = nc.servers.create(SERVERNAME, IMAGE, FLAVOR, key_name=keypair.name, userdata=userdata)
         print userdata
