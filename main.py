@@ -62,7 +62,7 @@ def main():
 
 	global result_array
 	result_array = []
-
+	n = 5
 	chunks_list = [tweet_files[i:i+n] for i in range(0, len(tweet_files), n)]
 
 	jobs_list = []
