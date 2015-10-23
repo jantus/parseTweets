@@ -97,7 +97,9 @@ def main():
 
 	result_dict = create_pronoun_dictionary()
 	global result_dict
-	
+	result_array = []
+	global result_array
+	result_array = []
 
 
 	###########################################################################
