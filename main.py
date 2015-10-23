@@ -124,7 +124,7 @@ def main():
 	worker_name = "joakim-lab3-worker-"
 	start_time = time.time()
 	# Start servers
-	for i in num_workers:
+	for i in range(0, num_workers):
 		print "Starting worker named: ", worker_name+str(i)
 		worker.initialize(worker_name+str(i))
 	end_time = time.time()
