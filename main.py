@@ -5,6 +5,7 @@ from celery import group
 import flaskapp 
 import random
 import worker_vm.server as worker
+import time
 
 
 def get_worker_information():
