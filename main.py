@@ -93,86 +93,97 @@ def get_worker_information():
 
 def main():
 		
-	tweet_files = get_twitter_file_names()
+    tweet_files = get_twitter_file_names()
 
-	result_dict = create_pronoun_dictionary()
-	global result_dict
-	result_array = []
-	global result_array
-	result_array = []
+    result_dict = create_pronoun_dictionary()
+    global result_dict
+    result_array = []
+    global result_array
+    result_array = []
 
+    ###########################################################################
+    #       Add workers
+    ###########################################################################
+    num_workers = 4
+ 	worker_name = "joakim-lab3-worker-"
+    init_time = time.time()
+    start_time = time.time()
+    # Start servers
+    for i in range(0, num_workers):
 
-	###########################################################################
-	#	Add tasks
-	###########################################################################
-	init_time = time.time()
-	start_time = time.time()
-	jobs_list = []
-	for filename in tweet_files:
-		print "Create task for  file", filename
-		result = parse_tweets.delay(filename)
-		global result_array
-		result_array.append(result)
-	end_time = time.time()
-	print "Created "+str(len(tweet_files))+" tasks in "+str(end_time-start_time)+" seconds"
-	
+        print "Starting worker named: ", worker_name+str(i)
+        worker.terminate(worker_name+str(i))
+        worker.initialize(worker_name+str(i))
+    end_time = time.time()
+    print "Created "+str(num_workers)+" workers in "+str(end_time-start_time)+" seconds"
 
-	###########################################################################
-	#	Add workers
-	###########################################################################
-	num_workers = 2
-	worker_name = "joakim-lab3-worker-"
-	start_time = time.time()
-	# Start servers
-	for i in range(0, num_workers):
-		print "Starting worker named: ", worker_name+str(i)
-		worker.initialize(worker_name+str(i))
-	end_time = time.time()
-	print "Created "+str(num_workers)+" workers in "+str(end_time-start_time)+" seconds"
+    print "Sleep for 20 seconds"
 
-	###########################################################################
-	#	waiting for result
-	###########################################################################
-	start_time = time.time()
-	while true:
-		time.sleep(10)
-		all_done = 0
-		for result in result_array:
-			if result.ready() == True:
-				all_done += 1
-		print str(all_done) + " out of "+str(len(result_array))+" tasks are done"
-		if all_done == len(result_array):
-			break
-
-	for result in result_array:
-		data = result.get()
-		for key, value in data.iteritems():
-			result_dict[key] += value
-	end_time = time.time()
-	print "Waiting for "+str(len(result_array))+" results in "+str(end_time-start_time)+" seconds"
+    time.sleep(20)
+   
+    ###########################################################################
+    #       Add tasks
+    ###########################################################################
+    start_time = time.time()
+    jobs_list = []
+    for filename in tweet_files:
+        print "Create task for  file", filename
+        result = parse_tweets.delay(filename)
+        global result_array
+        result_array.append(result)
+    end_time = time.time()
+    print "Created "+str(len(tweet_files))+" tasks in "+str(end_time-start_time)+" seconds"
 
 	###########################################################################
-	#	Terminate workers
-	###########################################################################
-	start_time = time.time()
-	for i in range(0, len(jobs_list)):
-		worker.terminate(worker_name+str(i))
-	end_time = time.time()
-	print "Terminting  "+str(len(result_array))+" workers in "+str(end_time-start_time)+" seconds"
+    #       waiting for result
+    ###########################################################################
+    start_time = time.time()
+    while True:
+    time.sleep(10)
+    all_done = 0
+    for result in result_array:
+        if result.ready() == True:
+            all_done += 1
+    print str(all_done) + " out of "+str(len(result_array))+" tasks are done"
+    if all_done == len(result_array):
+        break
 
-	###########################################################################
-	#	Start Flask App
-	###########################################################################
+    end_time = time.time()
+    print "Waiting for "+str(len(result_array))+" results in "+str(end_time-start_time)+" seconds"
+    print result_array
 
-	print "total execution time: " + time.time()-init_time
-	flaskapp.set_function(get_worker_information)
-	flaskapp.run_app()
+    for result in result_array:
+        data = result.get()
+        print data
+        for key, value in data[1].iteritems():
+	    	result_dict[key] += value
+    end_time = time.time()
+    print "Waiting for "+str(len(result_array))+" results in "+str(end_time-start_time)+" seconds"
 
-	
-	print "Done"
+
+    ###########################################################################
+    #       Terminate workers
+    ###########################################################################
+    start_time = time.time()
+    for i in range(0, len(jobs_list)):
+            worker.terminate(worker_name+str(i))
+    end_time = time.time()
+    print "Terminting  "+str(len(result_array))+" workers in "+str(end_time-start_time)+" seconds"
+
+    ###########################################################################
+    #       Start Flask App
+    ###########################################################################
+
+    print "total execution time: " + str(time.time()-init_time)
+    flaskapp.set_function(get_worker_information)
+    flaskapp.run_app()
+
+
+    print "Done"
 
 if __name__ == '__main__':
-	main()
+        main()
+
 
 
 
